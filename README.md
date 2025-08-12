@@ -8,7 +8,7 @@ HandoffFlow é um sistema avançado de transbordo que conecta chatbots a atenden
 [![Laravel Version](https://img.shields.io/badge/Laravel-11.x-FF2D20?logo=laravel)](https://laravel.com)
 [![Twilio Integration](https://img.shields.io/badge/Twilio-API-FF22B8?logo=twilio)](https://twilio.com)
 [![PHP Version](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://php.net)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 
 ## ✨ Funcionalidades Principais
 
@@ -250,7 +250,7 @@ Soon...
 
 ## ✉️ Contato
  
-Link do Projeto: [HdfFlow](https://github.com/Sertoriel/handoffflow)
+Link do Projeto: [HdfFlow](https://github.com/Sertoriel/HandoffFlow_TwilML?tab=readme-ov-file)
 
 ---
 
