@@ -1,0 +1,70 @@
+### LARAVEL CORE ###
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/storage/framework/cache/data/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+/bootstrap/cache/
+.env
+.env.*.local
+.phpunit.result.cache
+.dockerignore
+
+### COMPOSER & NPM ###
+composer.phar
+composer.lock
+package-lock.json
+yarn.lock
+npm-debug.log
+
+### IDE & EDITOR ###
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+*.code-workspace
+
+### TESTING & DEPLOY ###
+.phpunit.cache
+.phpunit.result.cache
+coverage/
+.phan/
+.pytest_cache/
+/build/
+.vercel
+.serverless/
+
+### DOCKER ###
+docker-compose.override.yml
+.docker
+
+### TWILIO/SENSITIVE ###
+twilio-credentials.json
+secrets.ini
+*.cert
+*.key
+
+### LARAVEL TEMPORARIES ###
+*.tmp
+*.log
+*.cache
+*.swp
+*~
+~$*
+
+### SYSTEM FILES ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+._*
+
+### FRONTEND ASSETS ###
+/public/js/
+/public/css/
+/public/mix-manifest.json
+/webpack-assets.json
