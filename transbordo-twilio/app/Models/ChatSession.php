@@ -13,4 +13,9 @@ class ChatSession extends Model
         'status',
         'operator_id'
     ];
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

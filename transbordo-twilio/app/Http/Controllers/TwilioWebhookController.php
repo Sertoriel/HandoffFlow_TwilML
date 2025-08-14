@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use App\Models\ChatSession;
+use App\Models\Message;
 use Illuminate\Support\Facades\Http;
+use App\Events\NewMessageEvent;
+use Twilio\Rest\Chat;
+use Illuminate\Support\Facades\Log;
 
 class TwilioWebhookController extends Controller
 {
@@ -31,11 +35,12 @@ class TwilioWebhookController extends Controller
         ]);
 
         // Responder ao Twilio
-        return response()->xml([
-            'Response' => [
-                'Message' => 'Estamos transferindo você para um atendente. Aguarde um momento.'
-            ]
-        ], 200, ['Content-Type' => 'application/xml']);
+        return response()->view('twiml.transfer', [], 200)
+            ->header('Content-Type', 'text/xml');
+
+
+
+        Log::debug('Handoff Request', $request->all());
     }
 
     public function webhook(Request $request)
@@ -51,7 +56,12 @@ class TwilioWebhookController extends Controller
 
         if ($session) {
             // Repassar para operador (exemplo via WebSocket)
-            broadcast(new NewMessageEvent($session->id, $message));
+            $session->messages()->create([
+                'direction' => 'inbound',
+                'body' => $message
+            ]);
+
+            broadcast(new NewMessageEvent($session->id, $message, 'inbound'));
         }
 
         return response('', 200);
@@ -78,10 +88,8 @@ class TwilioWebhookController extends Controller
         );
 
         // Redirecionar para o Flow original
-        return response()->xml([
-            'Response' => [
-                'Redirect' => 'https://studio.twilio.com/v2/Flows/FWXXXXXX/Executions'
-            ]
-        ], 200, ['Content-Type' => 'application/xml']);
+        return response()->view('twiml.redirect', [
+            'flow_sid' => env('TWILIO_FLOW_SID')
+        ], 200)->header('Content-Type', 'text/xml');
     }
 }
