@@ -35,7 +35,7 @@ class OperatorController extends Controller
         ]);
 
         $session = ChatSession::find($request->session_id);
-
+        // $session->update(['status' => 'answered']);
         //Salva a mensagem no banco de dados
         $session->messages()->create([
             'direction' => 'outbound',
@@ -47,7 +47,7 @@ class OperatorController extends Controller
         $twilio->messages->create(
             $session->customer_id,
             [
-                'from' => env('TWILIO_PHONE_NUMBER'),
+                'from' => env('TWILIO_WHATSAPP_NUMBER'),
                 'body' => $request->message
             ]
         );
@@ -62,7 +62,7 @@ class OperatorController extends Controller
         ]);
 
         $session = ChatSession::find($request->session_id);
-        $session->update(['status' => 'closed']);
+        // $session->update(['status' => 'closed']);
 
         //chamado de Webhook de fechamento
         Http::post(env('APP_URL') . '/api/twilio/close', [

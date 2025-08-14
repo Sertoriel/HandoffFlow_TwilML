@@ -26,7 +26,7 @@
     <ul>
         @foreach ($activeSessions as $session)
             <li>
-                {{ $session->customer_id }}
+                {{ $session->customer_id }} {{ $session->id }}
                 <button onclick="openChat('{{ $session->id }}', '{{ $session->customer_id }}')">
                     Atender
                 </button>

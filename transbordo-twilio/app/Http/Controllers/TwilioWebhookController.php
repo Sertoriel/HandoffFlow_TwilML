@@ -70,11 +70,11 @@ class TwilioWebhookController extends Controller
     public function closeChat(Request $request)
     {
         $request->validate([
-            'session_id' => 'required|integer',
+            'session_id' => 'required|exists:chat_sessions,id',
         ]);
 
         // Buscar e finalizar sessão
-        $session = ChatSession::findOrFail($request->session_id);
+        $session = ChatSession::find($request->session_id);
         $session->update(['status' => 'completed']);
 
         // Enviar mensagem final
@@ -87,9 +87,9 @@ class TwilioWebhookController extends Controller
             ]
         );
 
-        // Redirecionar para o Flow original
-        return response()->view('twiml.redirect', [
-            'flow_sid' => env('TWILIO_FLOW_SID')
-        ], 200)->header('Content-Type', 'text/xml');
+        // // Redirecionar para o Flow original
+        // return response()->view('twiml.redirect', [
+        //     'flow_sid' => env('TWILIO_FLOW_SID')
+        // ], 200)->header('Content-Type', 'text/xml');
     }
 }
