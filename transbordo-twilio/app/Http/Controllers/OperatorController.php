@@ -57,18 +57,22 @@ class OperatorController extends Controller
 
     public function closeSession(Request $request)
     {
-        $request->validate([
-            'session_id' => 'required|exists:chat_sessions,id',
-        ]);
+        try {
+            $request->validate([
+                'session_id' => 'required|exists:chat_sessions,id',
+            ]);
 
-        $session = ChatSession::find($request->session_id);
-        // $session->update(['status' => 'closed']);
+            $session = ChatSession::find($request->session_id);
+            // $session->update(['status' => 'closed']);
 
-        //chamado de Webhook de fechamento
-        Http::post(env('APP_URL') . '/api/twilio/close', [
-            'session_id' => $session->id
-        ]);
+            //chamado de Webhook de fechamento
+            Http::post('http://127.0.0.1:8000/api/twilio/close' , [
+                'session_id' => $session->id
+            ]);
 
-        return response()->json(['status' => 'success']);
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 }
