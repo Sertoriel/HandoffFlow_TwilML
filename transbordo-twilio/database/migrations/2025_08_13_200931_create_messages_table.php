@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('chat_session_id')->constrained();
             $table->enum('direction', ['inbound', 'outbound']);
             $table->text('body');
+            $table->string('twilio_message_sid')->nullable(); // Novo campo
+            $table->string('media_url')->nullable(); // Novo campo para mídias
             $table->timestamps();
         });
     }

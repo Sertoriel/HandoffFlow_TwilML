@@ -8,6 +8,8 @@ use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Twilio\Rest\Chat;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\CloseTwilioSession;
 
 class OperatorController extends Controller
 {
@@ -63,16 +65,25 @@ class OperatorController extends Controller
             ]);
 
             $session = ChatSession::find($request->session_id);
-            // $session->update(['status' => 'closed']);
 
-            //chamado de Webhook de fechamento
-            Http::post('http://127.0.0.1:8000/api/twilio/close' , [
-                'session_id' => $session->id
-            ]);
+            // 1. Atualizar status da sessão para 'completed' imediatamente
+            $session->update(['status' => 'completed']);
+            Log::info('Session status updated to completed', ['session_id' => $session->id]);
 
-            return response()->json(['status' => 'success']);
+            // 2. Despachar job para fechar a sessão no Twilio de forma assíncrona
+            // Isso evita bloquear a requisição do operador
+            CloseTwilioSession::dispatch($session->id);
+
+            return response()->json(['status' => 'success', 'message' => 'Session close initiated']);
         } catch (\Exception $e) {
-            dd($e);
+            // 3. Logging adequado em produção
+            Log::error('Error closing session from OperatorController', [
+                'session_id' => $request->session_id ?? 'N/A',
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['status' => 'error', 'message' => 'Failed to initiate session close'], 500);
         }
     }
 }

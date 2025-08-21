@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('initial_message');
             $table->enum('status', ['active', 'completed'])->default('active');
             $table->foreignId('operator_id')->nullable()->constrained('users');
+            $table->string('twilio_flow_sid')->nullable(); // Novo campo
+            $table->string('twilio_execution_sid')->nullable(); // Novo campo
             $table->timestamps();
         });
     }
